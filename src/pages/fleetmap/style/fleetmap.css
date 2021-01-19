@@ -1,0 +1,120 @@
+#leaflet-map{
+  height: 100%;
+  width: 100%;
+  background: url(../../../assets/images/blur_map.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+}
+.sidebar-infobox{
+  margin-bottom: 0.75rem;
+}
+.realtime-bus-marker, .realtime-bus-marker-tooltip.permanent-tooltip{
+  /*transition: transform ease-in-out 6s;*/
+  transition: transform linear 7s;
+}
+.prevent-animation .realtime-bus-marker, .prevent-animation .realtime-bus-marker-tooltip.permanent-tooltip{
+  transition: none;
+}
+.prevent-animation.leaflet-zoom-anim .realtime-bus-marker, .prevent-animation.leaflet-zoom-anim .realtime-bus-marker-tooltip.permanent-tooltip{
+  transition: 0.25s;
+}
+.realtime-bus-marker .realtime-bus-icon{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 500ms;
+}
+.realtime-bus-marker:hover .realtime-bus-icon{
+  transform: translateY(-0.125rem);
+}
+.realtime-bus-marker .realtime-bus-bg{
+  position: absolute;
+  top: -10px;
+  left: -11px;
+  width: 150%;
+  height: 150%;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: realtime-marker-blink 1s infinite alternate ease-out;
+  transition: background 0.5s, transform 0.5s;
+}
+.realtime-bus-marker:hover .realtime-bus-bg{
+  transform: scale(1.1);
+}
+.realtime-bus-marker.bg-label .realtime-bus-bg{
+  background: #1DC389;
+}
+.realtime-bus-marker.not-updated .realtime-bus-bg{
+  background: #FF4F4F;
+  animation: realtime-marker-error 1s 10 normal ease-out;
+}
+.bg-blurred .leaflet-popup-content-wrapper{
+  background: transparent;
+}
+.leaflet-tooltip.realtime-bus-marker-tooltip{
+  background: rgba(255, 255, 255, 0.50);
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 30px 60px;
+  border: none;
+  color: rgba(107, 114, 128);
+  font-size: 0.8rem;
+  padding: 10px;
+  border-radius: 0.5rem;
+  backdrop-filter: blur(10px);
+}
+.leaflet-tooltip.realtime-bus-marker-tooltip::before{
+  display: none;
+}
+.realtime-bus-marker-tooltip.permanent-tooltip{
+  backdrop-filter: none;
+  opacity: 1;
+  background: rgb(250,247,232);
+  background: linear-gradient(45deg, rgba(250,247,232,1) 0%, rgba(226,242,255,1) 100%, rgba(170,218,255,1) 100%);
+}
+.realtime-bus-marker-popup .leaflet-popup-tip{
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px)
+}
+.realtime-bus-marker-popup a.leaflet-popup-close-button{
+  top: 5px;
+  right: 5px;
+}
+.bg-realtime{
+  background: #1DC389;
+}
+.bg-offline{
+  background: #FF4F4F;
+}
+.map-control-button-live{
+  background: #1DC389;
+  color: #fff;
+  overflow: hidden;
+}
+.map-control-button-live.active{
+  background: transparent;
+}
+.map-control-button-live.active::after{
+  content: ' STOP ';
+  background: #FF4F4F;
+  position: absolute;
+  inset: -1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@keyframes realtime-marker-blink {
+  0% {
+    opacity: 0.3;
+  }
+  100%{
+    opacity: 0.8;
+  }
+}
+@keyframes realtime-marker-error {
+  0% {
+    opacity: 0.3;
+  }
+  100%{
+    opacity: 0.8;
+  }
+}

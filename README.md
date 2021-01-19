@@ -1,46 +1,35 @@
-# Getting Started with Create React App
+# Vehicles Monitoring System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple web app for AVM systems, written in React and TypeScript, to show location based data in Real Time.
 
-## Available Scripts
+![Vehicles View](https://github.com/giuseppebianchi/vehicle-monitoring-system/blob/master/public/demo.gif?raw=true)
 
-In the project directory, you can run:
+You just need to define the interface of your remote data model.
+My custom components (`to improve`) are based on [Tailwind CSS](http://tailwindcss.com) style libray (for now loaded via `CDN to keep configuration simple).
 
-### `yarn start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Vehicles View
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+This view presents a list of API endpoints provided by the user, where they can be selected to request remote data and then showing results on map as markers.
+![Vehicles View](https://github.com/giuseppebianchi/vehicle-monitoring-system/blob/master/public/all_view.png?raw=true)
 
-### `yarn test`
+## Real Time
+Realtime stream is can be handled by user via GET requests, setting its favorite interval time to fetchd data or via WebSockets (`incoming) as well.
+![Vehicles Real Time](https://github.com/giuseppebianchi/vehicle-monitoring-system/blob/master/public/all_realtime.png?raw=true)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Filter View
+Results are shown on map as markers and their information are listed in a scrollbar. Clicking on a  marker will open a popup, that contains all information about the tracked vehicle.
 
-### `yarn build`
+![Filter View](https://github.com/giuseppebianchi/vehicle-monitoring-system/blob/master/public/filter.png?raw=true)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![Filter View Empty](https://github.com/giuseppebianchi/vehicle-monitoring-system/blob/master/public/empty.png?raw=true)
+![Filter Loading View](https://github.com/giuseppebianchi/vehicle-monitoring-system/blob/master/public/loading.png?raw=true)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## GTFS View
+`incoming`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+This view allows you to show on map vehicles data with some GTFS (General Transit Feed Specification) data provided from a Public Transport Agency, such as bus stops, routes and trips.
 
-### `yarn eject`
+## License
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+[MIT](LICENSE) © Giuseppe Bianchi
