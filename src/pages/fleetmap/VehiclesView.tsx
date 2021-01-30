@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Banner, ContentCard, EmptyCard, Sidebar} from "../../components/uikit/uikit";
+import {Banner, ContentCard, DetailCard, EmptyCard, Sidebar} from "../../components/uikit/uikit";
 import classNames from "classnames";
 
 import {GiAerialSignal, GiKeyCard, IoCloudOfflineSharp} from "react-icons/all";
@@ -8,14 +8,11 @@ import busImg from '../../assets/images/cng.jpg'
 import {GPSData, VehiclesContext} from "./context/vehiclesContext";
 import {LatLngTuple} from "leaflet";
 import axios from "axios";
+import Moment from "react-moment";
 
 const sidebar_content = {
-    info: {
-        top: "Guseppe Bianchi",
-        bottom: "GSSI",
-        img: "https://pbs.twimg.com/profile_images/1254766882973839360/xP5QuF0U_400x400.jpg"
-    },
-    classname: "h-full inline-flex flex-col justify-between bg-white shadow p-6 bg-blurred bg-opacity-75 transition duration-150 xl:text-xl xl:w-80",
+    info: process.env.REACT_APP_SIDEBAR_INFO ? JSON.parse(process.env.REACT_APP_SIDEBAR_INFO) : [],
+    classname: "h-full inline-flex flex-col justify-between bg-white shadow p-6 bg-blurred bg-opacity-75 transition duration-150 xl:w-80",
     items: [
         {
             name: "All",
@@ -24,8 +21,8 @@ const sidebar_content = {
             icon: <GiRadarSweep />
         },
         {
-            name: "Real Time",
-            link: "/realtime",
+            name: "Online",
+            link: "/online",
             data_url: process.env.REACT_APP_VEHICLES_API_REALTIME as string,
             icon: <GiAerialSignal />
         },
@@ -62,7 +59,9 @@ const VehiclesView: React.FC<ViewProps> = ({active}) => {
         realtimeVehiclesPosition,
         setRealtimeVehiclesPosition,
         filterVehicles,
-        setFilterVehicles
+        setFilterVehicles,
+        setVehicleDetails,
+        vehicleDetails
     } = useContext(VehiclesContext)
 
     const realtime_min_time = new Date(Date.now() - 1000 * REALTIME_RANGE) // 30 secs
@@ -188,6 +187,7 @@ const VehiclesView: React.FC<ViewProps> = ({active}) => {
         //when filter view changes
         if(filterVehicles === "") {
             setRealtimeVehiclesPosition(false)
+            setVehicleDetails(null)
             return
         }
 
@@ -206,6 +206,33 @@ const VehiclesView: React.FC<ViewProps> = ({active}) => {
             setVehicles([])
         }
     }, [filterVehicles])
+
+    //update vehicleDetails is needed
+    useEffect(() => {
+        if(vehicleDetails && vehicles){
+            const updated_gps = vehicles.find((i: GPSData) => i.unitID === vehicleDetails.unitID)
+            //check if it has been changed
+            if(updated_gps){
+                if(updated_gps.datetime_system !== vehicleDetails.datetime_system){
+                    setVehicleDetails((v: GPSData) => {
+                        return {
+                            ...v,
+                            ...updated_gps
+                        }
+                    })
+                    if(!(map.getBounds().contains([updated_gps.latitude, updated_gps.longitude]))){
+                        map.flyTo([updated_gps.latitude, updated_gps.longitude], map.getZoom())
+                    }
+                    //create a button to follow the marker real time
+                    //map.panTo([updated_gps.latitude, updated_gps.longitude], map.getZoom())
+
+                }
+            }else{
+                setVehicleDetails(null);
+            }
+
+        }
+    }, [vehicles])
 
 
     const onClickSidebarItem = (f: string) => {
@@ -233,19 +260,26 @@ const VehiclesView: React.FC<ViewProps> = ({active}) => {
                     <div className="relative w-full h-full inline-flex flex-col pt-44 overflow-y-auto">
                         {/* CARD LIST */}
                         {vehiclesReady ? vehicles.length > 0 ? vehicles.map((i: GPSData) => {
-                            return <ContentCard key={i.unitID} subtitle={i.unitID} title={i.unitSN} img={busImg} content={{
-                                ...i,
-                                isRealtime: isVehicleRealTime(i.datetime_system, realtime_min_time)
-                            }} action={locateVehicle}/>
+                            const content = {
+                                jsx: <div className="b-card-body flex flex-col px-4 pb-8">
+                                        <h3 className="font-medium text-blue-300 text-sm">Driver ID: <span className="font-bold text-gray-500">{i.driverID}</span></h3>
+                                        {i.driverID_lastupdate && <h3 className="text-blue-300 text-sm">badged: <span className="font-medium text-gray-400 text-sm"><Moment format="llll">{i.driverID_lastupdate}</Moment></span></h3>}
+                                </div>,
+                                options: {
+                                    isRealtime: isVehicleRealTime(i.datetime_system, realtime_min_time)
+                                }
+                            }
+                            return <ContentCard key={i.unitID} subtitle={i.unitID} title={i.unitSN} img={busImg}
+                                                content={content}
+                                                action={() => locateVehicle([i.latitude, i.longitude])} selected={vehicleDetails?.unitID === i.unitID}/>
                         }) : <div className="bg-white py-6 px-3 sm:px-6 lg:px-8 rounded-md"><h1 className="text-red-500">No Vehicle</h1></div> : <EmptyCard></EmptyCard>}
                     </div>
                     <Banner classname="absolute top-24 left-6 right-6 rounded-md bg-blurred bg-opacity-50 bg-blue-50" onClickClose={() => onClickSidebarItem(filterVehicles)}>
                         <h1 className="text-blue-500">{filterVehicles}</h1>
                     </Banner>
                 </div>}
-
         </div>
     )
-};
+}
 
 export default VehiclesView;

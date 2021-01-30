@@ -5,6 +5,7 @@ import './tailwind.css';
 import defaultImage from '../../assets/images/default.jpg'
 import {LatLngTuple} from "leaflet";
 import Moment from "react-moment";
+import {FaCross, FaTimes} from "react-icons/all";
 
 const getStyledIcon = (icon: JSX.Element, classname: string) => {
     return (
@@ -304,7 +305,11 @@ export const Navbar: React.FC<NavbarProps> = ({menu, logo, style, classname, onC
 }
 
 interface SidebarProps {
-    info: any;
+    info?: {
+        top: string;
+        bottom: string;
+        img: string;
+    }[];
     items?: {
         name: string;
         link: string;
@@ -330,7 +335,7 @@ export const Sidebar: React.FC<SidebarProps> = ({items, style, classname, info, 
     }
     return (
         <aside className={`${classname ? classname : default_classname} ${collapsed ? "collapsed-sidebar" : ""}`} style={style}>
-            <nav className=" inline-flex flex-col space-y-2 w-full">
+            <nav className=" inline-flex flex-col space-y-2 w-full xl:text-xl">
                 {items ? items.map(({name, icon}) => {
                     return (
                         <span  key={name} className={classNames(
@@ -346,15 +351,19 @@ export const Sidebar: React.FC<SidebarProps> = ({items, style, classname, info, 
                     )
                 }) : children}
             </nav>
-            {info && <div className="sidebar-infobox b-list-item flex items-center w-full bg-gray-100 p-4 bottom-2 rounded-lg transition-all duration-150 hover:scale-110 sm:bg-transparent sm:p-0">
-                <img
-                src={info.img ? info.img : defaultImage}
-                alt="John Doe" className="w-10 h-10 object-cover rounded-full mr-4 border border-solid border-white" />
-                <div>
-                    <h3 className="sidebar-label text-gray-900 font-semibold">{info.top}</h3>
-                    <h4 className="sidebar-label text-sm text-gray-700 mt-1">{info.bottom}</h4>
+            <div className="sidebar-infobox w-full bg-gray-100 bottom-2 rounded-lg transition-all duration-150  p-4">
+            {info && info.map((item: any) => (
+                <div className="b-list-item flex items-center w-full bg-gray-100 bottom-2 rounded-lg transition-all duration-150 transform hover:scale-110 p-4 my-3">
+                    <img
+                    src={item.img ? item.img : defaultImage}
+                    alt={item.top} className="w-10 h-10 object-cover rounded-full mr-4 border border-solid border-white" />
+                    <div className="sidebar-label">
+                        <h3 className="text-gray-900 font-semibold">{item.top}</h3>
+                        <h4 className="text-sm text-gray-700 mt-1">{item.bottom}</h4>
+                    </div>
                 </div>
-            </div>}
+            ))}
+            </div>
             {collapsible && <span id="close-sidebar" onClick={collapsedSidebarHandler} /> }
         </aside>
     )
@@ -394,51 +403,47 @@ export const Banner: React.FC<BannerProps> = ({classname, style, children, onCli
 interface DetailCardProps {
     title: string;
     subtitle: string;
-    img?: string;
+    img?: any;
     classname?: string;
-    style?: React.StyleHTMLAttributes<any>;
+    style?: React.CSSProperties;
     selected?: boolean;
     thumbnail?: string;
+    content?: any;
+    actions?: any;
 }
 
-export const DetailCard: React.FC<DetailCardProps> = ({title, subtitle, img, selected, classname, style, children, thumbnail}) => {
+export const DetailCard: React.FC<DetailCardProps> = ({title, subtitle, img, selected, classname, style, children, thumbnail, content, actions}) => {
     return (
-        <article className="detail-card flex flex-col text-gray w-full h-auto mb-5 relative">
+        <article className={classname ? classname : "detail-card flex flex-col text-gray w-full h-auto mb-5 relative"} style={style}>
             <header className="header flex items-center mt-4 order-3">
                 <a href="#" className="mr-3">
-                    <img
-                        src={img ? img : defaultImage}
-                        alt="Profile image for Ivor Padilla" className="authorAvatar w-14 h-auto bg-black overflow-hidden rounded-lg"
-                    />
+                    {img ? img : <img src={defaultImage} className="authorAvatar w-14 h-auto bg-black overflow-hidden rounded-lg" />}
                 </a>
                 <div className="titleAndAuthor w-11/12 truncate">
-                    <h3 className="font-medium text-gray-300">UnitSN: <span className="font-bold text-white">{title}</span></h3>
-                    <h3 className="font-medium text-gray-300">UnitID: <span className="font-bold text-white">{subtitle}</span></h3>
-                </div>
-                <div className="action-menu mr-1 flex relative rounded-md w-fit">
-                    <button className="button MenuAction_button-1K2jT invisible-button ItemActions_button-1IG6J"
-                            title="Actions" data-test-id="action-menu" aria-haspopup="true" aria-expanded="false">
-                        <svg width="20" height="20" className="icon icon-ellipse" fill="#747A95">
-                            <use xlinkHref="/svgs/compiled/svgs.40016ff2.svg#ellipse"></use>
-                        </svg>
-                    </button>
+                    <h3 className="font-medium text-gray-100">UnitSN: <span className="font-bold text-white text-xl">{title}</span></h3>
+                    <h3 className="font-medium text-gray-100">UnitID: <span className="font-bold text-gray-100">{subtitle}</span></h3>
                 </div>
             </header>
-            <div className="thumbnail-wrap relative h-0 rounded-md pt-40 overflow-hidden bg-white bg-opacity-75 bg-cover bg-gradient">
+            <div className="thumbnail-wrap relative p-4 rounded-md bg-white bg-opacity-90">
                 {thumbnail && <><img className="grid-preview-image absolute object-cover w-full h-full top-0 left-0" loading="lazy"
                                      alt=""
                                      src="https://lh3.googleusercontent.com/proxy/JZ5LHdRREts9BwrZTPbzQk1b9pM1PhRWUS7TaMhU--w9q8FyQwzF08EFpUrRlAUBoojqs77SoyJS_qEOJAwzGkr8C5eigo5LMGBc8IbKpqesIsUUVvp_dNIwGkojXGZf1vPu_19Zw-lRZ2eEWc9gkdc" />
-                    <a className="cover-link absolute inset-0 border-0"
-                       href="https://codepen.io/ivorpad/pen/REMaLr"></a></>}
+                   </>}
+                {content.jsx}
+                <span className="cover-link absolute inset-0 border-0 hidden"></span>
+                <span className="absolute top-0 bottom-0 right-0 p-4 pl-10 z-10 opacity-0 hover:opacity-100 transition-all duration-500">
+                    <button
+                        onClick={actions?.onClose}
+                        className="text-lg p-1 bg-white rounded-md shadow-md transform hover:scale-110 transition-transform duration-250" title="Close">
+                        <FaTimes />
+                    </button>
+                </span>
             </div>
-            <footer className="stats absolute -bottom-12 left-1 pl-1 h-10 flex items-center text-sm overflow-hidden">
-                <button
-                    className="single-stat relative transition-all opacity-0 duration-200 relative mr-1 rounded-sm py-1 px-2 text-white border-0 delay-100 transform -translate-y-1/2">
-                    <svg width="16" height="16" className="icon icon-heart inline-block relative mr-1">\
-                        <use xlinkHref="/svgs/compiled/svgs.40016ff2.svg#heart"></use>
-                    </svg>
-                    <span className="count">1</span>
-                </button>
+            <footer className="stats absolute -bottom-12 h-10 flex items-center space-x-4 text-md font-medium overflow-hidden">
+                <span className={classNames("single-stat sm:w-auto leading-none text-white rounded-md bg-white transform transition-all duration-150  relative opacity-0 relative py-2 px-4 border-0 delay-100 hover:-translate-y-1 ", {"bg-realtime": content.options.isRealtime}, {"bg-offline": !content.options.isRealtime})} >{content.options.isRealtime ? "Online" : "Offline"}</span>
+                <span onClick={actions?.button1}
+                      className="single-stat sm:w-auto leading-none text-gray-400 rounded-md bg-white cursor-pointer transform transition-all duration-150  relative opacity-0 relative py-2 px-4 border-0 delay-100 hover:-translate-y-1 ">Locate</span>
+                <span className="single-stat sm:w-auto leading-none text-gray-400 rounded-md bg-white cursor-pointer transform transition-all duration-150  relative opacity-0 relative py-2 px-4 border-0 delay-100 hover:-translate-y-1 ">Copy Coords</span>
             </footer>
         </article>
     )
@@ -452,14 +457,14 @@ interface CardProps {
     selected?: boolean;
     thumbnail?: string;
     content?: any;
-    action: (point: LatLngTuple) => void;
+    action: any
 }
 //height is valiable and can contain a header, footer and body
 export const ContentCard: React.FC<CardProps> = ({title, subtitle, img, content, selected, action, classname, style, children, thumbnail}) => {
-    const isRealtime = content.isRealtime || false;
+    const isRealtime = content.options.isRealtime || false;
     return (
-        <article className="b-card relative text-gray w-full h-auto mb-6 shadow-lg font-medium">
-            <div className="thumbnail-wrap absolute inset-0 rounded-lg overflow-hidden bg-white bg-opacity-80 bg-cover bg-blurred">
+        <article className={classNames("b-card relative text-gray w-full h-auto mb-6 font-medium", {"highlighted-card": selected})}>
+            <div className="thumbnail-wrap absolute inset-0 rounded-lg overflow-hidden shadow-lg bg-opacity-80 bg-cover bg-blurred bg-white">
                 {thumbnail && <><img className="grid-preview-image absolute object-cover w-full h-full top-0 left-0" loading="lazy"
                      alt=""
                      src="https://lh3.googleusercontent.com/proxy/JZ5LHdRREts9BwrZTPbzQk1b9pM1PhRWUS7TaMhU--w9q8FyQwzF08EFpUrRlAUBoojqs77SoyJS_qEOJAwzGkr8C5eigo5LMGBc8IbKpqesIsUUVvp_dNIwGkojXGZf1vPu_19Zw-lRZ2eEWc9gkdc" />
@@ -471,12 +476,12 @@ export const ContentCard: React.FC<CardProps> = ({title, subtitle, img, content,
                     <a href="/giuseppebianchi" className="mr-3">
                         <img
                             src={img ? img : defaultImage}
-                            alt="Profile image for Ivor Padilla" className="authorAvatar w-14 h-auto bg-black overflow-hidden rounded-md"
+                            alt="Profile image for" className="authorAvatar w-14 h-auto bg-black overflow-hidden rounded-md"
                         />
                     </a>
                     <div className="titleAndAuthor w-11/12 truncate">
-                        <h3 className="font-medium text-blue-500 text-sm">UnitSN: <span className="font-extrabold text-gray-600 text-lg">{title}</span></h3>
-                        <h3 className="font-medium text-blue-500 text-sm">UnitID: <span className="font-bold text-gray-400">{subtitle}</span></h3>
+                        <h3 className="font-medium text-blue-300 text-sm">UnitSN: <span className="font-extrabold text-gray-600 text-lg">{title}</span></h3>
+                        <h3 className="font-medium text-blue-300 text-sm">UnitID: <span className="font-bold text-gray-400">{subtitle}</span></h3>
                     </div>
                     <div className="action-menu mr-1 flex relative rounded-md w-fit">
                         <button className="button MenuAction_button-1K2jT invisible-button ItemActions_button-1IG6J"
@@ -487,15 +492,12 @@ export const ContentCard: React.FC<CardProps> = ({title, subtitle, img, content,
                         </button>
                     </div>
                 </header>
-                <div className="b-card-body flex flex-col px-4 pb-8">
-                    <h3 className="font-medium text-blue-300 text-sm">Driver ID: <span className="font-bold text-gray-500">{content.driverID}</span></h3>
-                    {content.driverID_lastupdate && <h3 className="text-blue-300 text-sm">badged: <span className="font-medium text-gray-400 text-sm"><Moment format="llll">{content.driverID_lastupdate}</Moment></span></h3>}
-                </div>
+                {content.jsx}
                 <footer className="footer absolute flex items-center px-4 -bottom-3" /* bottom-0 p-6 */>
                     <div className="list-buttons flex items-center flex-row space-x-4">
-                        <span className={classNames("rounded-md text-white items-center justify-center px-4 py-1 text-sm transition-all duration-500", {"bg-realtime": isRealtime}, {"bg-offline": !isRealtime})} >{isRealtime ? "Real Time" : "Offline"}</span>
-                        <span onClick={() => action([content.latitude, content.longitude])}
-                            className="sm:w-auto leading-none text-gray-300 rounded-md bg-white cursor-pointer shadow-sm py-1 px-4 border border-transparent transform transition-all duration-150 hover:shadow-lg hover:-translate-y-0.5  hover:text-blue-300">Locate</span>
+                        <span className={classNames("rounded-md text-white items-center justify-center px-4 py-1 text-sm transition-all duration-500", {"bg-realtime": isRealtime}, {"bg-offline": !isRealtime})} >{isRealtime ? "Online" : "Offline"}</span>
+                        <span onClick={action}
+                            className="sm:w-auto leading-none text-gray-400 rounded-md bg-white cursor-pointer shadow-sm py-1 px-4 border border-transparent transform transition-all duration-150 hover:shadow-lg hover:-translate-y-0.5  hover:text-blue-300">Locate</span>
                     </div>
                 </footer>
             </div>
@@ -517,7 +519,7 @@ export const Card: React.FC<CardProps> = ({title, subtitle, img, selected, class
                 <a href="/giuseppebianchi" className="mr-3">
                     <img
                         src={img ? img : defaultImage}
-                        alt="Profile image for Ivor Padilla" className="authorAvatar w-14 h-auto bg-black overflow-hidden rounded-md"
+                        alt="Profile image for" className="authorAvatar w-14 h-auto bg-black overflow-hidden rounded-md"
                     />
                 </a>
                 <div className="titleAndAuthor w-11/12 truncate">

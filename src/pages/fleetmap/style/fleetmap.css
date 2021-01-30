@@ -102,6 +102,15 @@
   align-items: center;
   justify-content: center;
 }
+.detail-card-marker-popup.detail-card::after {
+  background: rgba(60, 145, 230,0.2);
+  backdrop-filter: blur(10px);
+}
+.tracked-marker .realtime-bus-bg{
+  background: #3C91E6;
+  animation: none;
+}
+
 @keyframes realtime-marker-blink {
   0% {
     opacity: 0.3;

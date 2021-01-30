@@ -36,6 +36,11 @@
     overflow: hidden;
     transform: translateX(-10px);
 }
+.collapsed-sidebar .sidebar-infobox{
+    opacity: 0;
+    overflow: hidden;
+    transform: translateX(-10px);
+}
 #close-sidebar{
     width: 7px;
     height: 3rem;
@@ -81,13 +86,28 @@
     background: #1f2229;
     clip-path: inset(2rem 0 2rem 2rem round 10px);
     contain: strict;
-    transition: clip-path 0.3s ease 0.1s;
+    transition: all 0.3s ease 0.1s;
 }
 .detail-card:hover::after, .detail-card.selected::after, .b-card:active::after {
     clip-path: inset(0 0 0 0 round 10px);
     transition-delay: 0s;
+    bottom: -3rem;
 }
 .detail-card:hover .single-stat, .detail-card.selected .single-stat, .detail-card:active .single-stat {
     opacity: 1;
     transform: translateY(0);
+}
+.highlighted-card > .thumbnail-wrap.bg-white{
+    background: rgba(60, 145, 230,0.2);
+}
+
+.highlighted-card [class^="text-blue"],
+.highlighted-card [class*=" text-blue"]{
+    color: rgb(243, 244, 246)
+}
+.highlighted-card header [class^="text-gray"],
+.highlighted-card header [class*=" text-gray"],
+.highlighted-card .b-card-body [class^="text-gray"],
+.highlighted-card .b-card-body [class*=" text-gray"]{
+    color: #fff;
 }

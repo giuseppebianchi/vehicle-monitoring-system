@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import L from "leaflet";
+import L, {LeafletEvent} from "leaflet";
 
 const VehiclesContext:any = React.createContext({});
 
@@ -18,6 +18,7 @@ export interface GPSData {
 
 const VehiclesContextProvider = ({ children }: any) => {
     const [vehicles, setVehicles] = useState<GPSData[]>([])
+    const [vehicleDetails, setVehicleDetails] = useState<GPSData | null>(null)
     const [vehiclesReady, setVehiclesReady] = useState(null)
     const [realtimeVehiclesPosition, setRealtimeVehiclesPosition] = useState(false)
     const [map, setMap] = useState<L.Map | null>(null)
@@ -25,8 +26,8 @@ const VehiclesContextProvider = ({ children }: any) => {
     const [permanentLabels, setPermanentLabels] = useState(false)
     const REALTIME_RANGE = 30; // 30 SECONDS
 
-    const isVehicleRealTime = (vehicle: Date, time: Date) => {
-        return vehicle > time
+    const isVehicleRealTime = (vehicle: Date, time?: Date) => {
+        return vehicle > (time ? time : new Date(Date.now() - 1000 * REALTIME_RANGE))
     }
 
     const vehiclesContextValue = {
@@ -43,7 +44,9 @@ const VehiclesContextProvider = ({ children }: any) => {
         realtimeVehiclesPosition,
         setRealtimeVehiclesPosition,
         filterVehicles,
-        setFilterVehicles
+        setFilterVehicles,
+        vehicleDetails,
+        setVehicleDetails
     }
 
     return (
