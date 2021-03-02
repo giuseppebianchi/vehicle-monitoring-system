@@ -2,19 +2,28 @@
 
 A simple web app for AVM systems, written in React and TypeScript, to show location based data in Real Time.
 
-![Vehicles View](https://github.com/giuseppebianchi/vehicle-monitoring-system/blob/master/public/screenshots/demo.gif?raw=true)
+![Vehicles Monitoring System](https://github.com/giuseppebianchi/vehicle-monitoring-system/blob/master/public/screenshots/demo.gif?raw=true)
 
 You just need to define the interface of your remote data model.
 
-My custom components (`to improve`) are based on [Tailwind CSS](http://tailwindcss.com) style libray (for now loaded via `CDN` to keep configuration simple).
+My custom components (`to improve`) are based on [Tailwind CSS](http://tailwindcss.com) style library (for now loaded via `CDN` to keep configuration simple).
 
-
-# Vehicles View
+# Features
+## Vehicles View
 
 ![Vehicles View](https://github.com/giuseppebianchi/vehicle-monitoring-system/blob/master/public/screenshots/all_view.png?raw=true)
 This view presents a list of API endpoints provided by the user, where they can be selected to request remote data and then showing results on map as markers.
 
 Results are shown on map as markers and their information are listed in a scrollbar. Clicking on a  marker will open a popup, that contains all information about the tracked vehicle.
+
+## Vehicle's Details
+
+![Vehicles Details](https://github.com/giuseppebianchi/vehicle-monitoring-system/blob/master/public/screenshots/details.png?raw=true)
+When a vehicle is clicked, a box will be shown, listing every information related to that vehicle.
+
+### Speedometer
+A simple component has been built to animate speed variations when real time tracking is enabled.
+
 
 ## Filters
 
@@ -53,6 +62,7 @@ This view allows you to show vehicles data on map  with GTFS (General Transit Fe
   - [x] Markers Leaflet Tooltip
   - [x] Locate marker on map from list
   - [x] Detail Card Infobox, to show all vehicle's information
+  - [x] Speedometer
 
 
 - [x] Real Time
@@ -65,13 +75,15 @@ This view allows you to show vehicles data on map  with GTFS (General Transit Fe
 - [ ] Geocoding
 
 - [ ] Custom and Reusable Components
-- [ ] Demo Page
+- [ ] Demo Page - public API needed
 
 - [ ] React Optimizations and Code Refactoring
 - [x] React useContext
 - [ ] Accessibility
 
 ## Release History
+`v0.2.1`
+- Speedometer in DetailCard to animate speed information when a vehicle is tracked real time.
 `v0.2.0`
 - Removed Leaflet Popup for markers to introduce DetailCard component
 - Now, when a marker is clicked, vehicle's info are shown on a Details Card and its status as well

@@ -139,6 +139,11 @@ const MapControlsBanner: React.FC<{map: L.Map, center?: LatLngTuple}> = ({map, c
                         </div>
                         <div className="b-card-body flex flex-col p-4">
                         <h3 className="font-medium text-gray-400 flex items-center text-lg text-blue-300"><IoSpeedometer /><span className="text-black ml-2"><strong>{parseInt(vehicleDetails.speed)}</strong> k/h</span></h3>
+                        {realtimeVehiclesPosition && isVehicleRealTime(vehicleDetails.datetime_system, realtime_min_time) &&
+                        <div className="speedometer">
+                            <div style={{width: `${vehicleDetails.speed}%`}}></div>
+                        </div>
+                        }
                         <h3 className="font-medium text-gray-400">Last Update: <Moment className="font-bold text-black" fromNow>{vehicleDetails.datetime}</Moment></h3>
                         <h3 className="font-medium text-gray-400">Timestamp: <Moment className="font-bold text-black" format="DD/MM/YYYY HH:mm:ss" >{vehicleDetails.datetime}</Moment></h3>
                         <br />
