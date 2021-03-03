@@ -26,3 +26,6 @@ yarn-error.log*
 .idea
 
 .eslintcache
+
+# tailwind
+/src/assets/tailwind.css

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Link, NavLink} from "react-router-dom";
 import classNames from "classnames";
-import './tailwind.css';
+//import '../../assets/tailwind.css';
 import defaultImage from '../../assets/images/default.jpg'
 import {LatLngTuple} from "leaflet";
 import Moment from "react-moment";
